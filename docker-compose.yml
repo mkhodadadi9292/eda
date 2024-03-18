@@ -1,0 +1,95 @@
+version: '3'
+
+services:
+
+
+#  redis:
+#    image: redis
+#    container_name: redis-container
+#    ports:
+#      - "6379:6379"
+#    networks:
+#      - fake_network
+
+  db:
+    image: postgres:12.4
+    container_name: postgres-container-EDA
+    environment:
+      POSTGRES_DB: "my_database"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data1:/var/lib/postgresql/data
+    networks:
+      - fake_network
+
+#  worker:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile.celery
+#    container_name: celery-worker
+#    environment:
+#      - BROKER_URL=redis://redis:6379/0
+#      - RESULT_BACKEND=redis://redis:6379/0
+#    depends_on:
+#      - redis
+#      - db
+#    networks:
+#      - fake_network
+
+#  flower:
+#    image: mher/flower:0.9.7
+#    command: [ 'flower', '--broker=redis://redis:6379', '--port=5555' ]
+#    ports:
+#      - "5557:5555"
+#    depends_on:
+#      - redis
+#    networks:
+#      - fake_network
+
+  #  django:
+  #    build:
+  #      context: .
+  #      dockerfile: Dockerfile
+  #    container_name: django-container
+  #    environment:
+  #      - POSTGRES_PASSWORD=postgres
+  #    ports:
+  #      - "8000:8000"
+  ##    command: python manage.py runserver 0.0.0.0:8000
+  #    depends_on:
+  #      - db
+  #      - redis
+  #      - worker
+  #    env_file:
+  #      - .env
+  #    networks:
+  #      - fake_network
+
+
+#  rabbitmq:
+#    image: "rabbitmq:3-management"
+#    ports:
+#      - "5672:5672"  # RabbitMQ default port
+#      - "15672:15672"  # RabbitMQ Management UI port
+#    env_file:
+#      - .env
+#    environment:
+#      RABBITMQ_DEFAULT_USER: "your_username"
+#      RABBITMQ_DEFAULT_PASS: "your_password"
+#    networks:
+#      - fake_network
+#
+#    volumes:
+#      - 'rabbitmq_data:/data'
+
+
+volumes:
+  postgres_data1:
+  rabbitmq_data:
+
+networks:
+  fake_network:
+    driver: bridge
