@@ -1,19 +1,20 @@
 import abc
 from typing import Self
 from src.inventory.adapters import repository
+from src.database import database
 
 
 class AbstractUnitOfWork(abc.ABC):
     book: repository.AbstractRepository
 
-    def __enter__(self) -> Self:
+    async def __aenter__(self) -> Self:
         return self
 
-    def __exit__(self, *args):
-        self.rollback()
+    async def __aexit__(self, *args):
+        await self.rollback()
 
-    def commit(self):
-        self._commit()
+    async def commit(self):
+        await self._commit()
 
     def collect_new_events(self):
         for product in self.book.seen:
@@ -21,9 +22,29 @@ class AbstractUnitOfWork(abc.ABC):
                 yield product.events.pop(0)
 
     @abc.abstractmethod
-    def _commit(self):
+    async def _commit(self):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def rollback(self):
+    async def rollback(self):
         raise NotImplementedError
+
+
+class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
+    def __init__(self, session_factory=database.get_session):
+        self.session_factory = session_factory
+
+    async def __aenter__(self):
+        self.session = self.session_factory()  # type: Session
+        self.products = repository.SqlAlchemyRepository(self.session)
+        return await super().__aenter__()
+
+    async def __aexit__(self, *args):
+        await super().__aexit__(*args)
+        await self.session.close()
+
+    async def _commit(self):
+        await self.session.commit()
+
+    async def rollback(self):
+        await self.session.rollback()
