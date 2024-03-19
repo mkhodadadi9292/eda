@@ -10,7 +10,7 @@ router = APIRouter(tags=["Authentication"])
 
 
 @router.post("/books/")
-async def create_user(body: BookModel, session: AsyncSession = Depends(get_session)):
+async def add_book(body: BookModel, session: AsyncSession = Depends(get_session)):
     book = Book(title=body.title,
                 author=body.author,
                 quantity=body.quantity)
