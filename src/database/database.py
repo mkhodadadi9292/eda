@@ -30,7 +30,7 @@ engine = create_async_engine(DATABASE_URL, future=True)
      the database. This helps manage memory efficiently and ensures consistency between the session and the database state.
       However, it may result in additional overhead due to lazy-loading operations when accessing expired objects.
 """
-async_session_maker = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
+async_session_maker = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession, autoflush=True)
 
 
 # TODO: Following code is suggested for making sync sessions.

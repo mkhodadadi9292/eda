@@ -10,16 +10,17 @@ class AbstractUnitOfWork(abc.ABC):
     async def __aenter__(self) -> Self:
         return self
 
-    async def __aexit__(self, *args):
-        await self.rollback()
+    async def __aexit__(self, exc_type, exc_value, traceback):
+        if exc_type is not None:
+            await self.rollback()
 
     async def commit(self):
         await self._commit()
 
     def collect_new_events(self):
-        for product in self.book.seen:
-            while product.events:
-                yield product.events.pop(0)
+        for _book in self.book.seen:
+            while _book.events:
+                yield _book.events.pop(0)
 
     @abc.abstractmethod
     async def _commit(self):
@@ -41,10 +42,15 @@ class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
 
     async def __aexit__(self, *args):
         await super().__aexit__(*args)
-        await self.session.aclose()
+        await self.session.close()
 
     async def _commit(self):
         await self.session.commit()
 
     async def rollback(self):
-        await self.session.rollback()
+         await self.session.rollback()
+
+
+async def get_uow():
+    async with SqlAlchemyUnitOfWork() as uow:
+        yield uow
