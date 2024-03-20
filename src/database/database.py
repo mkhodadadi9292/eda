@@ -1,7 +1,8 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
 
-DATABASE_URL = f"postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/my_database"
+# DATABASE_URL = f"postgresql+asyncpg://postgres:postgres@127.0.0.1:5432/my_database"
+DATABASE_URL = f"postgresql+asyncpg://postgres:postgres@172.22.67.222:5432/my_database"
 
 engine = create_async_engine(DATABASE_URL, future=True)
 
@@ -29,7 +30,7 @@ engine = create_async_engine(DATABASE_URL, future=True)
      the database. This helps manage memory efficiently and ensures consistency between the session and the database state.
       However, it may result in additional overhead due to lazy-loading operations when accessing expired objects.
 """
-async_session_maker = sessionmaker(engine, expire_on_commit=True, class_=AsyncSession)
+async_session_maker = sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
 
 # TODO: Following code is suggested for making sync sessions.
@@ -41,6 +42,11 @@ async_session_maker = sessionmaker(engine, expire_on_commit=True, class_=AsyncSe
 # )
 
 
+# async def get_session() -> AsyncSession:
+#     async with async_session_maker() as session:
+#         yield session
+
+
 async def get_session() -> AsyncSession:
-    async with async_session_maker() as session:
-        yield session
+    session = async_session_maker()
+    return session

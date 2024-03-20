@@ -35,13 +35,13 @@ class SqlAlchemyUnitOfWork(AbstractUnitOfWork):
         self.session_factory = session_factory
 
     async def __aenter__(self):
-        self.session = self.session_factory()  # type: Session
-        self.products = repository.SqlAlchemyRepository(self.session)
+        self.session = await self.session_factory()  # type: Session
+        self.book = repository.BookRepository(self.session)
         return await super().__aenter__()
 
     async def __aexit__(self, *args):
         await super().__aexit__(*args)
-        await self.session.close()
+        await self.session.aclose()
 
     async def _commit(self):
         await self.session.commit()
