@@ -3,8 +3,8 @@ from typing import List
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy import update
-from src.inventory.domain import model
-from src.inventory.adapters import orm
+from Inventory_service.src.inventory.domain import model
+from Inventory_service.src.inventory.adapters import orm
 
 
 class AbstractRepository(abc.ABC):

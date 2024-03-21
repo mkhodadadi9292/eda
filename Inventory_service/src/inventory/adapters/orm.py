@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, Field
-from src.inventory.domain.model import BookModel
+from Inventory_service.src.inventory.domain.model import BookModel
 
 # class Book(SQLModel, table=True):
 #     id: int = Field(primary_key=True)

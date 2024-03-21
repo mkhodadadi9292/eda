@@ -1,7 +1,7 @@
 import abc
 from typing import Self
-from src.inventory.adapters import repository
-from src.database import database
+from Inventory_service.src.inventory.adapters import repository
+from Inventory_service.src.database import database
 
 
 class AbstractUnitOfWork(abc.ABC):

@@ -1,9 +1,9 @@
-from fastapi import FastAPI, Depends, APIRouter, status
+from fastapi import Depends, APIRouter, status
 from typing import List
-from src.inventory.adapters.orm import Book
-from src.inventory.domain.model import BookModel
-from src.inventory.service_layer.unit_of_work import SqlAlchemyUnitOfWork, AbstractUnitOfWork, get_uow
-from src.inventory.service_layer import service
+from Inventory_service.src.inventory.adapters.orm import Book
+from Inventory_service.src.inventory.domain.model import BookModel
+from Inventory_service.src.inventory.service_layer.unit_of_work import AbstractUnitOfWork, get_uow
+from Inventory_service.src.inventory.service_layer import service
 
 router = APIRouter(tags=["Inventory"])
 

@@ -1,8 +1,6 @@
 from typing import List
-from src.inventory.service_layer import unit_of_work
-from src.inventory.domain import model
-from src.inventory.adapters import repository
-
+from Inventory_service.src.inventory.service_layer import unit_of_work
+from Inventory_service.src.inventory.domain import model
 
 
 async def get_book_by_id(pk: int, uow: unit_of_work.AbstractUnitOfWork) -> model.BookModel:

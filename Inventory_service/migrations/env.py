@@ -20,9 +20,8 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 # target_metadata = None
 #####################################
-from sqlmodel import SQLModel
 from alembic import context
-from src.inventory.adapters.orm import *  # Import your SQLModel models here
+from Inventory_service.src.inventory.adapters.orm import *  # Import your SQLModel models here
 
 target_metadata = SQLModel.metadata
 
