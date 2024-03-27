@@ -1,16 +1,12 @@
 from sqlmodel import SQLModel, Field
-from Inventory_service.src.inventory.domain.model import BookModel
-
-# class Book(SQLModel, table=True):
-#     id: int = Field(primary_key=True)
-#     title: str = Field(sa_column_kwargs={"nullable": False})
-#     author: str = Field(sa_column_kwargs={"nullable": False})
-#     quantity: int = Field(sa_column_kwargs={"nullable": False})
+# from Inventory_service.src.inventory.domain.model import ProductModel
+from ..domain.model import ProductModel
 
 
-class Book(BookModel, table=True):
+
+class Product(ProductModel, table=True):
     id: int = Field(primary_key=True)
 
     @classmethod
-    def data_model_to_sqlmodel(cls, obj: BookModel) -> SQLModel:
+    def data_model_to_sqlmodel(cls, obj: ProductModel) -> SQLModel:
         return cls(**obj.dict())
